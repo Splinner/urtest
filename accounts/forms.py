@@ -56,7 +56,7 @@ class JurCustomerRegForm(UserForm):
                                               queryset=enum.PayType.objects.all(),
                                               widget=forms.CheckboxSelectMultiple)
     inn = UrtestinnNumberField(label = "ИНН", required=False)
-    bank_account = UrtestNumberField(label = "Номер счета",  required=False)
+    bank_account = UrtestNumberField(label = "Номер  банковского счета компании",  required=False)
     class Meta:
         model = models.JurCustomer
         fields = ['type', 'email', 'password', 'password_confirm'] + [
@@ -263,7 +263,7 @@ class PhysCustomerChangeForm(forms.ModelForm):
             'phone',
             'pay_type',
             'pay_type']
-    
+
     def save(self, *args, **kwargs):
         """Обновление заказчика с учетом смены пароля"""
         # Вызов оригинального save

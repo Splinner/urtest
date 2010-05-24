@@ -1,9 +1,11 @@
 # File encoding: utf-8
+from urtest.lib.fields import UrtestinnNumberField
 from django import forms
 
 from django.contrib.auth.models import User
 from django.forms.widgets import CheckboxSelectMultiple
 
+from lib.fields import *
 from bugtracker.models import Bug, Project
 from accounts.models import Tester, Customer
 from enumerations.models import ProgramLanguage, Language
@@ -16,8 +18,8 @@ class ProjectForm(forms.ModelForm):
     """
     Форма добавления проекта
     """
-    name = forms.CharField(label='Название', max_length=50)
-    size = forms.IntegerField(label='Размер в SLOC')
+    name = forms.CharField(label='Название', max_length=100)
+    size = UrtestNumberField(label='Размер в SLOC')
 
     program_languages = forms.ModelMultipleChoiceField(
         label="ЯП",

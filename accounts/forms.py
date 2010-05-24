@@ -1,11 +1,13 @@
 # File encoding: utf-8
 
+from urtest.lib.fields import UrtestNumberField
+from urtest.lib.fields import UrtestinnNumberField
 from django import forms
 from django.contrib.auth.models import User
 from django.forms.extras.widgets import SelectDateWidget
 from django.forms.widgets import CheckboxSelectMultiple
 
-from lib.fields import UrtestTextAreaField, UrtestPasswordField, UrtestFIOField
+from lib.fields import *
 from enumerations import models as enum
 from accounts import models
 
@@ -48,12 +50,13 @@ class JurCustomerRegForm(UserForm):
     address_ur = UrtestTextAreaField(label="Юридический адрес компании")
     description = UrtestTextAreaField(label="Информация о компании")
     repr_surname = UrtestFIOField(label="Фамилия заказчика", max_length=80)
-    repr_name = UrtestFIOField(label="Имя заказчика", max_length=30)
-    repr_second_name = UrtestFIOField(label="Отчество заказчика", max_length=50, required=False)
+    repr_name = UrtestFIOField(label="Имя заказчика", max_length=80)
+    repr_second_name = UrtestFIOField(label="Отчество заказчика", max_length=80, required=False)
     pay_type = forms.ModelMultipleChoiceField(label="Способ оплаты",
                                               queryset=enum.PayType.objects.all(),
                                               widget=forms.CheckboxSelectMultiple)
-
+    inn = UrtestinnNumberField(label = "ИНН", required=False)
+    bank_account = UrtestNumberField(label = "Номер счета",  required=False)
     class Meta:
         model = models.JurCustomer
         fields = ['type', 'email', 'password', 'password_confirm'] + [
@@ -80,10 +83,13 @@ class JurCustomerRegForm(UserForm):
 class PhysCustomerRegForm(UserForm):
     type = forms.CharField(widget=forms.HiddenInput, initial='p')
     surname = UrtestFIOField(label="Фамилия заказчика", max_length=80)
-    name = UrtestFIOField(label="Имя заказчика", max_length=30)
-    second_name = UrtestFIOField(label="Отчество заказчика", max_length=50, required=False)
+    name = UrtestFIOField(label="Имя заказчика", max_length=80)
+    second_name = UrtestFIOField(label="Отчество заказчика", max_length=80, required=False)
     pay_type = forms.ModelMultipleChoiceField(label="Способ оплаты", queryset=enum.PayType.objects.all(), widget=forms.CheckboxSelectMultiple)
     passport_when = forms.DateField(label="Дата выдачи", widget=SelectDateWidget(years=range(2010, 1900, -1)))
+    passport_series = UrtestPassportSeriesField(label="Серия паспорта", max_length = 4, required=False)
+    passport_number = UrtestPassportNumberField(label="Номер паспорта",max_length=6, required=False)
+
 
     class Meta:
         model = models.PhysCustomer
@@ -97,6 +103,7 @@ class PhysCustomerRegForm(UserForm):
             'passport_when',
             'passport_who',
             'phone',
+            'other_connect',
             'pay_type',
         ]
 
@@ -104,8 +111,8 @@ class PhysCustomerRegForm(UserForm):
 
 class TesterRegForm(UserForm):
     surname = UrtestFIOField(label="Фамилия", max_length=80)
-    name = UrtestFIOField(label="Имя", max_length=30)
-    second_name = UrtestFIOField(label="Отчество", max_length=30, required=False)
+    name = UrtestFIOField(label="Имя", max_length=80)
+    second_name = UrtestFIOField(label="Отчество", max_length=80, required=False)
     description = UrtestTextAreaField(label="О себе", required=False)
     os = forms.ModelMultipleChoiceField(label="Операционные системы",
                                         queryset=enum.OS.objects.all(),
@@ -131,6 +138,9 @@ class TesterChangeForm(forms.ModelForm):
     password = UrtestPasswordField(label='Пароль', required=False)
     password_confirm = UrtestPasswordField(label='Подтверждение пароля',
                                            required=False)
+    surname = UrtestFIOField(label="Фамилия", max_length=80)
+    name = UrtestFIOField(label="Имя", max_length=80)
+    second_name = UrtestFIOField(label="Отчество", max_length=80, required=False)
     os = forms.ModelMultipleChoiceField(label="Операционные системы",
                                               queryset=enum.OS.objects.all(),
                                               widget=CheckboxSelectMultiple)
@@ -143,7 +153,7 @@ class TesterChangeForm(forms.ModelForm):
 
     class Meta:
         model = models.Tester
-        fields = ['password', 'password_confirm', 'os', 'program_languages', 'testing_types', 'browsers', 'description']
+        fields = ['password', 'password_confirm', 'surname','name', 'second_name', 'os', 'program_languages', 'testing_types', 'browsers', 'description']
 
     def save(self, *args, **kwargs):
         """Обновление тестера с учетом смены пароля"""
@@ -174,10 +184,12 @@ class JurCustomerChangeForm(forms.ModelForm):
                                            required=False)
 
     repr_surname = UrtestFIOField(label="Фамилия заказчика", max_length=80)
-    repr_name = UrtestFIOField(label="Имя заказчика", max_length=30)
-    repr_second_name = UrtestFIOField(label="Отчество заказчика", max_length=50, required=False)
+    repr_name = UrtestFIOField(label="Имя заказчика", max_length=80)
+    repr_second_name = UrtestFIOField(label="Отчество заказчика", max_length=80, required=False)
     pay_type = forms.ModelMultipleChoiceField(label="Способ оплаты",
                                               queryset=enum.PayType.objects.all())
+    inn = UrtestinnNumberField(label = "ИНН", required=False)
+    bank_account = UrtestNumberField(label = "Номер счета",  required=False)
     #testing_types = forms.ModelMultipleChoiceField(label="Способ оплаты",
    #                                                queryset=enum.TestingType.objects.all())
 
@@ -191,7 +203,6 @@ class JurCustomerChangeForm(forms.ModelForm):
         'repr_name',
         'repr_second_name',
         'address_ur',
-        'pay_type',
         'inn',
         'bank_account',
         'bank',
@@ -199,7 +210,8 @@ class JurCustomerChangeForm(forms.ModelForm):
         'bik',
         'correspondent_account',
         'ogrn',
-        'phone']
+        'repr_phone',
+        'pay_type']
 
     def save(self, *args, **kwargs):
         """Обновление заказчика с учетом смены пароля"""
@@ -227,9 +239,11 @@ class PhysCustomerChangeForm(forms.ModelForm):
     password_confirm = UrtestPasswordField(label='Подтверждение пароля',
                                            required=False)
     surname = UrtestFIOField(label="Фамилия заказчика", max_length=80)
-    name = UrtestFIOField(label="Имя заказчика", max_length=30)
-    second_name = UrtestFIOField(label="Отчество заказчика", max_length=50, required=False)
-    passport_when = forms.DateField(label="Дата выдачи", widget=SelectDateWidget(years=range(2010, 1900, -1)))
+    name = UrtestFIOField(label="Имя заказчика", max_length=80)
+    second_name = UrtestFIOField(label="Отчество заказчика", max_length=80, required=False)
+    passport_number = UrtestPassportNumberField (label="Номер паспорта", max_length = 6, required=False)
+    passport_series = UrtestPassportSeriesField(label="Серия паспорта", max_length = 4, required=False)
+    passport_when = forms.DateField(label="Дата выдачи", widget=SelectDateWidget(years=range(2010, 1900, -1)),required=False)
     pay_type = forms.ModelMultipleChoiceField(label="Способ оплаты",
                                             queryset=enum.PayType.objects.all())
     #testing_types = forms.ModelMultipleChoiceField(label="Способ оплаты",

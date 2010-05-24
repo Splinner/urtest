@@ -63,6 +63,8 @@ def tester_detail_projects(request, tester_id):
 
 def tester_registration(request):
     """Регистрация тестера"""
+    #print request.POST
+
     if request.method == 'POST':
         form = TesterRegForm(request.POST)
         if form.is_valid():

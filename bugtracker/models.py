@@ -8,8 +8,8 @@ from blogs.models import Blog
 
 class Project(models.Model):
     """Модель проекта"""
-    name = models.CharField("название", max_length=50, unique=True)
-    size = models.IntegerField("размер в SLOC")
+    name = models.CharField("название", max_length=100, unique=True)
+    size = models.IntegerField("размер в SLOC", max_length = 50)
     program_languages = models.ManyToManyField(ProgramLanguage,
                                         related_name='projects',
                                         verbose_name="язык программирования")

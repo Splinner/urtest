@@ -40,8 +40,8 @@ class Tester(User, UserTypeMixin):
     """Модель тестера"""
     user = models.OneToOneField(User, parent_link=True)
     surname = models.CharField("Фамилия", max_length=80)
-    name = models.CharField("Имя", max_length=30)
-    second_name = models.CharField("Отчество", max_length=30, blank=True)
+    name = models.CharField("Имя", max_length=80)
+    second_name = models.CharField("Отчество", max_length=80, blank=True)
     os = models.ManyToManyField(enum.OS,
                                         related_name='testers',
                                         verbose_name="ОС")
@@ -54,7 +54,7 @@ class Tester(User, UserTypeMixin):
     browsers = models.ManyToManyField(enum.Browser,
                                         related_name='testers',
                                         verbose_name="браузеры")
-    description = models.TextField("о себе", blank=True, max_length=300)
+    description = models.TextField("о себе", blank=True, max_length=600)
     #photo = models.FileField("фотография", upload_to="/home/media", blank=True, max_length=100)
     blog = models.OneToOneField(Blog)
 
@@ -161,14 +161,14 @@ class PhysCustomer(Customer):
     """Модель физического лица"""
     customer = models.OneToOneField(Customer, parent_link=True)
     surname = models.CharField("Фамилия заказчика", max_length=80)
-    name = models.CharField("Имя заказчика", max_length=30)
-    second_name = models.CharField("Отчество заказчика", max_length=50, blank=True)
-    passport_series = models.IntegerField("Серия паспорта", max_length=4)
-    passport_number = models.IntegerField("Номер паспорта", max_length=6)
-    passport_when = models.DateField("Дата выдачи")
-    passport_who = models.CharField("Кем выдан", max_length=100)
-    phone = models.CharField("Контактный телефон", max_length=50)
-    #other_connect = models.CharField("Другие контактные данные", max_length=100)
+    name = models.CharField("Имя заказчика", max_length=80)
+    second_name = models.CharField("Отчество заказчика", max_length=80, blank=True)
+    passport_series = models.IntegerField("Серия паспорта", max_length=4, blank = True)
+    passport_number = models.IntegerField("Номер паспорта", max_length=6, blank = True)
+    passport_when = models.DateField("Дата выдачи", blank = True)
+    passport_who = models.CharField("Кем выдан", max_length=100, blank = True)
+    phone = models.CharField("Контактный телефон", max_length=80)
+    other_connect = models.CharField("Другие контактные данные", max_length=80)
     pay_type = models.ManyToManyField(enum.PayType, related_name='PhysCustomers',
                                 verbose_name="Способ оплаты")
     @property
@@ -189,22 +189,22 @@ class PhysCustomer(Customer):
 class JurCustomer(Customer):
     """Модель юридического лица"""
     customer = models.OneToOneField(Customer, parent_link=True)
-    name = models.CharField("Название компании", max_length=50)
-    inn = models.IntegerField("ИНН", max_length=10)
-    bank_account = models.IntegerField("Номер счета", max_length=50)
-    bank = models.CharField("Банк", max_length=50)
-    kpp = models.CharField("КПП", max_length=50)
-    bik = models.CharField("БИК", max_length=50)
-    correspondent_account = models.CharField("Корреспондентский счет", max_length=50)
-    ogrn = models.CharField("ОГРН", max_length=50)
-    phone = models.CharField("Контактный телефон компании", max_length=50)
-    www = models.URLField("Адрес сайта компании", max_length=100)
-    address_ur = models.TextField("Юридический адрес компании", max_length=300)
-    description = models.TextField("Информация о компании", max_length=300)
+    name = models.CharField("Название компании", max_length=100)
+    inn = models.IntegerField("ИНН", max_length=10, blank = True)
+    bank_account = models.IntegerField("Номер счета", max_length=50, blank = True)
+    bank = models.CharField("Банк", max_length=100, blank = True)
+    kpp = models.CharField("КПП", max_length=100, blank = True)
+    bik = models.CharField("БИК", max_length=100, blank = True)
+    correspondent_account = models.CharField("Корреспондентский счет", max_length=100, blank = True)
+    ogrn = models.CharField("ОГРН", max_length=100, blank = True)
+    phone = models.CharField("Контактный телефон компании", max_length=100)
+    www = models.URLField("Адрес сайта компании", max_length=100, blank = True)
+    address_ur = models.TextField("Юридический адрес компании", max_length=600)
+    description = models.TextField("Информация о компании", max_length=600)
     repr_surname = models.CharField("Фамилия заказчика", max_length=80)
-    repr_name = models.CharField("Имя заказчика", max_length=30)
-    repr_second_name = models.CharField("Отчество заказчика", max_length=50, blank=True)
-    repr_phone = models.CharField("Контактный телефон", max_length=50)
+    repr_name = models.CharField("Имя заказчика", max_length=80)
+    repr_second_name = models.CharField("Отчество заказчика", max_length=80, blank=True)
+    repr_phone = models.CharField("Контактный телефон представителя компании", max_length=100)
     pay_type = models.ManyToManyField(enum.PayType, related_name='UrCustomers',
         verbose_name="Способ оплаты")
 

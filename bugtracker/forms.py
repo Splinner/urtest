@@ -121,7 +121,7 @@ class BugStatusUpdateForm(forms.ModelForm):
     status_comment = forms.CharField(label="Примечание",
                                      widget=forms.Textarea,
                                      required=False,
-                                     max_length=100)
+                                     max_length=600)
     
     class Meta:
         model = Bug

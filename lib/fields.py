@@ -85,7 +85,7 @@ class UrtestinnNumberField(forms.RegexField):
 
     Ограничивает max_length
     """
-    inn_regex = '(^\d{0, 10}$)'
+    inn_regex = '(^\d{0,10}$)'
     generic_error = {"invalid": "Должно быть введено не более 10 цифр"}
 
     def __init__(self, *args, **kwargs):
@@ -102,7 +102,7 @@ class UrtestNumberField(forms.RegexField):
 
     Ограничивает max_length
     """
-    inn_regex = '(^\d{0, 50}$)'
+    inn_regex = '(^\d{0,50}$)'
     generic_error = {"invalid": "Должно быть введено не более 50 цифр"}
 
     def __init__(self, *args, **kwargs):

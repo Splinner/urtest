@@ -261,7 +261,6 @@ class PhysCustomerChangeForm(forms.ModelForm):
             'passport_when',
             'passport_who',
             'phone',
-            'pay_type',
             'pay_type']
 
     def save(self, *args, **kwargs):
